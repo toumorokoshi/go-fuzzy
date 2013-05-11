@@ -8,11 +8,10 @@ type TestString struct {
 }
 
 func TestLevenshtein(t *testing.T) {
-	testStrings := [...]testString {
+	testStrings := [...]TestString{
 		TestString{"kitten", "sitting", 3},
-	  TestString{"same", "same", 0},
+		TestString{"same", "same", 0},
 	}
-	testStrings := make([]TestString, 10)
 	for _, v := range testStrings {
 		distance := Levenshtein(v.A, v.B)
 		if distance != v.Expected {

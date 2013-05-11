@@ -4,7 +4,7 @@ import "testing"
 
 // build the matcher required for testing
 func BuildMatcher() Matcher {
-	strings := [...]string {
+	strings := []string {
 		"adult",
 		"fear",
 		"here",
@@ -13,43 +13,47 @@ func BuildMatcher() Matcher {
 		"test",
 		"yusuke",
 	}
-	return Matcher{strings}
+	return NewMatcher(strings)
 }
 
 // test's the matchers Closest method
 func TestClosest(t *testing.T) {
-	matcher := BuildMatcher()
+	m := BuildMatcher()
 
-	if matcher.Closest("ktn") != "kitten" {
-		t.Errorf("ktn should match 'kitten'! it was %s instead.", matcher.Closest("ktn"))
+	if m.Closest("ktn") != "kitten" {
+		t.Errorf("ktn should match 'kitten'! it was %s instead.", m.Closest("ktn"))
 	}
-	if matcher.Closest("t") != "test" {
-		t.Errorf("ktn should match 'test'! it was %s instead.", matcher.Closest("t"))
+	if m.Closest("t") != "test" {
+		t.Errorf("ktn should match 'test'! it was %s instead.", m.Closest("t"))
 	}
 }
 
 func TestClosestList(t *testing.T) {
-	matcher := BuildMatcher()
+	m:= BuildMatcher()
 
-	matcherResult := matcher.Closest("ktn", 4)
+	matcherResult := m.ClosestList("ktn", 4)
 	if len(matcherResult) != 4 {
 		t.Errorf("matcherResult returned result of incorrect length! expected 4, was %d instead", len(matcherResult))
 	}
+}
 
-	matcherResult := matcher.Closest("ad", matcherResult.Length + 1)
-	if len(matcherResult) != matcherResult.Length {
+func TestClosestListMax(t *testing.T) {
+	m:= BuildMatcher()
+
+	matcherResult := m.ClosestList("ad", m.Length + 1)
+	if len(matcherResult) != m.Length {
 		t.Errorf("matcherResult returned incorrect result length %d, expected %d", 
-			len(matcherResult), matcherResult.Length)
-	} else if matcherResult[0] != "adult" {
+			len(matcherResult), m.Length)
+	} else if matcherResult[0].Value != "adult" {
 		t.Errorf("Closest with length returned incorrect result: %s instead of %s",
 			matcherResult[0], "adult")
 	}
 }
 
 func BenchmarkClosest(t* testing.T) {
-	matcher := BuildMatcher()
-	matcherResult := matcher.Closest("t", 4)
-	matcherResult := matcher.Closest("te", 4)
-	matcherResult := matcher.Closest("tes", 4)
-	matcherResult := matcher.Closest("test", 4)
+	m:= BuildMatcher()
+	matcherResult := m.ClosestList("t", 4)
+	matcherResult = m.ClosestList("te", 4)
+	matcherResult = m.ClosestList("tes", 4)
+	matcherResult = m.ClosestList("test", 4)
 }
