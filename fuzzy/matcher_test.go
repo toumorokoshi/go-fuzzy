@@ -50,7 +50,7 @@ func TestClosestListMax(t *testing.T) {
 	}
 }
 
-func BenchmarkClosest(t* testing.B) {
+func BenchmarkClosest(b* testing.B) {
 	m:= BuildMatcher()
 	_ = m.ClosestList("t", 4)
 	_ = m.ClosestList("te", 4)
