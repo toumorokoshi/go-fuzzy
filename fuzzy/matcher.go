@@ -1,7 +1,7 @@
 /* Provides a matcher object, used to efficently find matches to a
 /* query
 */
-package matcher
+package fuzzy
 
 import "sort"
 
@@ -36,7 +36,7 @@ func (m *Matcher) Closest(matchString string) string {
 func (m *Matcher) ClosestList(matchString string, count int) Matches{
 	matchElements := make(Matches, m.Length)
 	for pos, element := range m.elements {
-		matchElements[pos] = &Match{element, fuzzy.Levenshtein(element, matchString)}
+		matchElements[pos] = &Match{element, Levenshtein(element, matchString)}
 	}
 	sort.Sort(matchElements)
 	return matchElements[0:count]

@@ -1,4 +1,4 @@
-package matcher
+package fuzzy
 
 import "testing"
 
@@ -24,7 +24,7 @@ func TestClosest(t *testing.T) {
 		t.Errorf("ktn should match 'kitten'! it was %s instead.", m.Closest("ktn"))
 	}
 	if m.Closest("t") != "test" {
-		t.Errorf("ktn should match 'test'! it was %s instead.", m.Closest("t"))
+		t.Errorf("t should match 'test'! it was %s instead.", m.Closest("t"))
 	}
 }
 
@@ -50,10 +50,10 @@ func TestClosestListMax(t *testing.T) {
 	}
 }
 
-func BenchmarkClosest(t* testing.T) {
+func BenchmarkClosest(t* testing.B) {
 	m:= BuildMatcher()
-	matcherResult := m.ClosestList("t", 4)
-	matcherResult = m.ClosestList("te", 4)
-	matcherResult = m.ClosestList("tes", 4)
-	matcherResult = m.ClosestList("test", 4)
+	_ = m.ClosestList("t", 4)
+	_ = m.ClosestList("te", 4)
+	_ = m.ClosestList("tes", 4)
+	_ = m.ClosestList("test", 4)
 }
