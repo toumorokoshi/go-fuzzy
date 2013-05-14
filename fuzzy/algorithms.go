@@ -1,5 +1,9 @@
 package fuzzy
 
+import "strings"
+
+// all algorithms ignore case unless specified otherwise
+
 // returns the levenshtein distance of two strings
 func Levenshtein(a, b string) int {
 	distanceMatrix := make([][]int, len(a)+1)
@@ -33,4 +37,26 @@ func Levenshtein(a, b string) int {
 		}
 	}
 	return distanceMatrix[len(a)][len(b)]
+}
+
+// returns true if the characters in a 
+// appear in the same sequence as b
+func SequenceMatch(a, b string) bool {
+	return SequenceMatchCaseSensitive(strings.ToLower(a), strings.ToLower(b))
+}
+
+func SequenceMatchCaseSensitive(a, b string) bool {
+	index := 0
+	runes := []rune(a)
+	rune_length := len(runes)
+	for _, c := range b {
+		if index < rune_length {
+			if runes[index] == c {
+				index++
+			}
+		} else {
+			return true
+		}
+	}
+	return false
 }

@@ -12,12 +12,12 @@ type Matcher struct {
 }
 
 type Match struct {
-	Value string
-	Score   int
+	Value          string
+	Levenshtein    int
 }
 
 func (m Match) String() string {
-	return fmt.Sprintf("{ Score: %d, Value: %s }", m.Score, m.Value)
+	return fmt.Sprintf("{ Levenshtein: %d, Value: %s }", m.Levenshtein, m.Value)
 }
 
 type Matches []*Match
@@ -25,7 +25,7 @@ type Matches []*Match
 // provides methods to make matches sortable
 func (m Matches) Len() int           { return len(m) }
 func (m Matches) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
-func (m Matches) Less(i, j int) bool { return m[i].Score < m[j].Score }
+func (m Matches) Less(i, j int) bool { return m[i].Levenshtein < m[j].Levenshtein }
 
 func NewMatcher(elements []string) Matcher {
 	return Matcher{elements, len(elements)}
@@ -37,8 +37,11 @@ func (m *Matcher) Closest(matchString string) string {
 }
 
 /* finds the n closest matches and returns them
- */
-func (m *Matcher) ClosestList(matchString string, count int) Matches{
+   start by filtering the requirements:
+       * the order of characters appearing in the substring matches the characters in the substring
+       * utilize the levenshtein distance after that
+*/
+func (m *Matcher) ClosestList(matchString string, count int) Matches {
 	if count > m.Length {
 		count = m.Length
 	}

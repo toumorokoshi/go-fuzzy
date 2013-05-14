@@ -19,3 +19,24 @@ func TestLevenshtein(t *testing.T) {
 		}
 	}
 }
+
+type TestStringSubsequence struct {
+	A, B     string
+	Expected bool
+}
+
+func TestSubsequenceMatch(t *testing.T) {
+	testStrings := [...]TestStringSubsequence{
+		TestStringSubsequence{"rdn", "relaxeddailyroutine", true},
+		TestStringSubsequence{"npe", "electroplankton", false},
+		TestStringSubsequence{"mastermind", "masterminder", true},
+		TestStringSubsequence{"dDe", "disasterdeafening", false},
+		TestStringSubsequence{"dDe", "disasterDeafening", true},
+	}
+	for _, v := range testStrings {
+		matched := SequenceMatchCaseSensitive(v.A, v.B)
+		if matched != v.Expected {
+			t.Errorf("Levenshtein distance between %s and %s should be %t, was %t", v.A, v.B, v.Expected, matched)
+		}
+	}
+}
