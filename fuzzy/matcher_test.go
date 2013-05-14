@@ -17,6 +17,7 @@ func BuildMatcher() Matcher {
 }
 
 // test's the matchers Closest method
+// TODO: this test needs to be better
 func TestClosest(t *testing.T) {
 	m := BuildMatcher()
 
