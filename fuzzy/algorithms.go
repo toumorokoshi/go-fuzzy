@@ -1,6 +1,7 @@
 package fuzzy
 
 import "strings"
+import "unicode"
 
 // all algorithms ignore case unless specified otherwise
 
@@ -37,6 +38,35 @@ func Levenshtein(a, b string) int {
 		}
 	}
 	return distanceMatrix[len(a)][len(b)]
+}
+
+// returns the ranking of the matching based on the number of
+// characters the character matched with, and the significance of the
+// character. For example, a capital is of higher significance than a
+// lowercase, so the match is ranked higher. The total rank is the
+// total value of the matches. If the subsequence doesn't match, the
+// value is zero.
+func OrderSignificance(a, b string) int {
+	a = strings.ToLower(a)
+	value := 0
+	index := 0
+	runes := []rune(a)
+	rune_length := len(runes)
+	for _, c := range b {
+		if index < rune_length {
+			switch runes[index] {
+		  case unicode.ToUpper(c):
+				value++
+				fallthrough
+			case c: 
+				value++
+				index++
+			}
+		} else {
+			return 0
+		}
+	}
+	return 0
 }
 
 // returns true if the characters in a 

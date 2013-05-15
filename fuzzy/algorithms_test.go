@@ -32,11 +32,29 @@ func TestSubsequenceMatch(t *testing.T) {
 		TestStringSubsequence{"mastermind", "masterminder", true},
 		TestStringSubsequence{"dDe", "disasterdeafening", false},
 		TestStringSubsequence{"dDe", "disasterDeafening", true},
+		TestStringSubsequence{"dDe", "disasterDeafening", true},
 	}
 	for _, v := range testStrings {
 		matched := SequenceMatchCaseSensitive(v.A, v.B)
 		if matched != v.Expected {
 			t.Errorf("Levenshtein distance between %s and %s should be %t, was %t", v.A, v.B, v.Expected, matched)
+		}
+	}
+}
+
+func TestOrderSignificance(t *testing.T) {
+	testStrings := [...]TestString{
+		TestString{"rdn", "relaxeddailyroutine", 3},
+		TestString{"rdn", "RelaxedDailyroutine", 5},
+		TestString{"npe", "electroplankton", 0},
+		TestString{"mastermind", "masterminder", 10},
+		TestString{"dDe", "disasterdeafening", 3},
+		TestString{"dDe", "disasterDeafening", 4},
+	}
+	for _, v := range testStrings {
+		value := OrderSignificance(v.A, v.B)
+		if value != v.Expected {
+			t.Errorf("Order and Significance value between %s and %s should be %d, was %d", v.A, v.B, v.Expected, value)
 		}
 	}
 }
