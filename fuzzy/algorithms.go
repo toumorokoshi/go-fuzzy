@@ -1,7 +1,6 @@
 package fuzzy
 
 import "strings"
-import "log"
 import "unicode"
 
 // all algorithms ignore case unless specified otherwise
@@ -63,27 +62,21 @@ func OrderSignificance(a, b string) int {
 		for k, r := range reverseRunes(runes) {
 			j := len(runes) - k - 1
 			if unicode.ToLower(c) == r {
-				// if you hit the first unmatching character, no valid
-				// sequence exists, so break out of the loop.
-				if(index[j] == -1) {
-					index[j] = i
-					if j == 0 {
-						pointers[i] = -1 
-					} else {
-						pointers[i] = index[j - 1]
-					}
-				} else if b_runes[index[j]] == r && c == unicode.ToUpper(r) {
-						pointers[i] = pointers[index[j]]
-						index[j] = i
-				}
+				if (index[j] == -1 && (j == 0 || index[j - 1] != -1)) ||
+					 (index[j] != -1 && b_runes[index[j]] == r && c == unicode.ToUpper(r)) {
+					 if j == 0 {
+						 pointers[j] = -1
+					 } else {
+						 pointers[i] = index[j - 1]
+					 }
+					 index[j] = i
+				 }
 			}
 		}
 	}
 	start_index := index[len(runes) - 1]
 	rune_index := len(runes) - 1
 	value := 0
-	log.Print(index)
-	log.Print(pointers)
 	for start_index != -1 {
 		if runes[rune_index] == b_runes[start_index] {
 			value += 1
