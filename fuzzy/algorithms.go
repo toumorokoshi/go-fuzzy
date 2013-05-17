@@ -1,6 +1,7 @@
 package fuzzy
 
 import "strings"
+import "log"
 import "unicode"
 
 // all algorithms ignore case unless specified otherwise
@@ -48,25 +49,51 @@ func Levenshtein(a, b string) int {
 // value is zero.
 func OrderSignificance(a, b string) int {
 	a = strings.ToLower(a)
-	value := 0
-	index := 0
+	// a value slice and optimal index slice is necessary
 	runes := []rune(a)
-	rune_length := len(runes)
-	for _, c := range b {
-		if index < rune_length {
-			switch runes[index] {
-		  case unicode.ToUpper(c):
-				value++
-				fallthrough
-			case c: 
-				value++
-				index++
+	b_runes := []rune(b)
+	index := make([]int, len(runes), len(runes))
+	// a slice telling a travereser where to point to next
+	pointers := make([]int, len(b), len(b))
+	for i, _ := range index {
+		index[i] = -1
+	}
+	// array of runes left to index
+	for i, c := range b_runes {
+		for k, r := range reverseRunes(runes) {
+			j := len(runes) - k - 1
+			if unicode.ToLower(c) == r {
+				// if you hit the first unmatching character, no valid
+				// sequence exists, so break out of the loop.
+				if(index[j] == -1) {
+					index[j] = i
+					if j == 0 {
+						pointers[i] = -1 
+					} else {
+						pointers[i] = index[j - 1]
+					}
+				} else if b_runes[index[j]] == r && c == unicode.ToUpper(r) {
+						pointers[i] = pointers[index[j]]
+						index[j] = i
+				}
 			}
-		} else {
-			return 0
 		}
 	}
-	return 0
+	start_index := index[len(runes) - 1]
+	rune_index := len(runes) - 1
+	value := 0
+	log.Print(index)
+	log.Print(pointers)
+	for start_index != -1 {
+		if runes[rune_index] == b_runes[start_index] {
+			value += 1
+		} else { // else it's a capital
+			value += 2
+		}
+		start_index = pointers[start_index]
+		rune_index--
+	}
+	return value
 }
 
 // returns true if the characters in a 

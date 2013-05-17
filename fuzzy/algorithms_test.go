@@ -46,12 +46,14 @@ func TestOrderSignificance(t *testing.T) {
 	testStrings := [...]TestString{
 		TestString{"rdn", "relaxeddailyroutine", 3},
 		TestString{"rdn", "RelaxedDailyroutine", 5},
+		TestString{"rdn", "relaxedDailyRoutiNe", 5},
 		TestString{"npe", "electroplankton", 0},
 		TestString{"mastermind", "masterminder", 10},
 		TestString{"dDe", "disasterdeafening", 3},
 		TestString{"dDe", "disasterDeafening", 4},
 	}
 	for _, v := range testStrings {
+		t.Logf("Testing OrderSignificance %s against %s...", v.A, v.B)
 		value := OrderSignificance(v.A, v.B)
 		if value != v.Expected {
 			t.Errorf("Order and Significance value between %s and %s should be %d, was %d", v.A, v.B, v.Expected, value)
