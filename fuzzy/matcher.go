@@ -18,7 +18,7 @@ type Match struct {
 }
 
 func (m Match) String() string {
-	return fmt.Sprintf("{ Levenshtein: %d, Value: %s }", m.Levenshtein, m.Value)
+	return fmt.Sprintf("{ OrderSignificance: %d, Levenshtein: %d, Value: %s }", m.OrderSignificance, m.Levenshtein, m.Value)
 }
 
 type Matches []*Match

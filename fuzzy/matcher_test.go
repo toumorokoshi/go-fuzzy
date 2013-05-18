@@ -57,8 +57,10 @@ func TestClosestListMax(t *testing.T) {
 
 func BenchmarkClosest(b* testing.B) {
 	m:= BuildMatcher()
-	_ = m.ClosestList("t", 4)
-	_ = m.ClosestList("te", 4)
-	_ = m.ClosestList("tes", 4)
-	_ = m.ClosestList("test", 4)
+	for i :=0; i <= b.N; i++ {
+		_ = m.ClosestList("t", 4)
+		_ = m.ClosestList("te", 4)
+		_ = m.ClosestList("tes", 4)
+		_ = m.ClosestList("test", 4)
+	}
 }
