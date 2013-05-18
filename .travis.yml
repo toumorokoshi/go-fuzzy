@@ -1,4 +1,4 @@
 language: go
 
 script:
- - cd fuzzy && go test -v
+ - go test -v
