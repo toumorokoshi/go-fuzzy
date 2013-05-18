@@ -46,7 +46,7 @@ func Levenshtein(a, b string) int {
 // lowercase, so the match is ranked higher. The total rank is the
 // total value of the matches. If the subsequence doesn't match, the
 // value is zero.
-func OrderSignificance(a, b string) int {
+func OrderSignificance(b, a string) int {
 	a = strings.ToLower(a)
 	// a value slice and optimal index slice is necessary
 	runes := []rune(a)

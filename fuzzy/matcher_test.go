@@ -13,23 +13,39 @@ func BuildMatcher() Matcher {
 		"test",
 		"yusuke",
 		"ReadingRainbow",
+    "EEResume.pdf",
+		"Lab5-ASSUBMITTED.docx",
 	}
 	return NewMatcher(strings)
 }
 
+type TestClosestStruct struct {
+	TestString, Expected string
+}
+
+func TestComparisons(t *testing.T) {
+	m1 := NewMatch("ReadingRainbow", "rr")
+	m2 := NewMatch("fear", "rr")
+	matches := Matches{m1, m2}
+	if matches.Less(1, 0) {
+		t.Errorf("ReadingRainbow should be closer than fear to rr!")
+	}
+}
+
 // test's the matchers Closest method
-// TODO: this test needs to be better
 func TestClosest(t *testing.T) {
 	m := BuildMatcher()
-
-	if m.Closest("ktn") != "kitten" {
-		t.Errorf("ktn should match 'kitten'! it was %s instead.", m.Closest("ktn"))
+	testClosestStructs := [...]TestClosestStruct{
+		TestClosestStruct{"ktn", "kitten"},
+		TestClosestStruct{"tes", "test"},
+		TestClosestStruct{"rr", "ReadingRainbow"},
+		TestClosestStruct{"resume", "EEResume.pdf"},
 	}
-	if m.Closest("t") != "test" {
-		t.Errorf("t should match 'test'! it was %s instead.", m.Closest("t"))
-	}
-	if m.Closest("rr") != "ReadingRainbow" {
-		t.Errorf("rr should match 'ReadingRainbow'! it was %s instead.", m.Closest("rr"))
+	for _, v := range testClosestStructs {
+		t.Logf("Testing match %s...", v.TestString)
+		if m.Closest(v.TestString) != v.Expected {
+			t.Errorf("%s should match '%s'! it was %s instead.", v.TestString, v.Expected, m.Closest(v.TestString))
+		}
 	}
 }
 
@@ -45,7 +61,7 @@ func TestClosestList(t *testing.T) {
 func TestClosestListMax(t *testing.T) {
 	m:= BuildMatcher()
 
-	matcherResult := m.ClosestList("ad", m.Length + 1)
+	matcherResult := m.ClosestList("adu", m.Length + 1)
 	if len(matcherResult) != m.Length {
 		t.Errorf("matcherResult returned incorrect result length %d, expected %d", 
 			len(matcherResult), m.Length)

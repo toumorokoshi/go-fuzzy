@@ -56,7 +56,7 @@ func TestOrderSignificance(t *testing.T) {
 	}
 	for _, v := range testStrings {
 		t.Logf("Testing OrderSignificance %s against %s...", v.A, v.B)
-		value := OrderSignificance(v.A, v.B)
+		value := OrderSignificance(v.B, v.A)
 		if value != v.Expected {
 			t.Errorf("Order and Significance value between %s and %s should be %d, was %d", v.A, v.B, v.Expected, value)
 		}
