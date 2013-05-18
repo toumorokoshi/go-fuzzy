@@ -49,7 +49,7 @@ func (m Matches) String() string {
 func (m Matches) Len() int           { return len(m) }
 func (m Matches) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
 func (m Matches) Less(i, j int) bool { 
-	if m[i].Exact != m[j].Exact { return false }
+	if m[i].Exact != m[j].Exact { return m[i].Exact }
 	if m[i].SignificantMatch != m[j].SignificantMatch { return m[i].SignificantMatch }
 	if m[i].IndexMatch != m[j].IndexMatch { 
 		return m[j].IndexMatch == -1 ||

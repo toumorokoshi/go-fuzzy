@@ -15,6 +15,8 @@ func BuildMatcher() Matcher {
 		"ReadingRainbow",
     "EEResume.pdf",
 		"Lab5-ASSUBMITTED.docx",
+		"mortgage-calculator-ui-mobile.js",
+		"mobile.js",
 	}
 	return NewMatcher(strings)
 }
@@ -40,6 +42,7 @@ func TestClosest(t *testing.T) {
 		TestClosestStruct{"tes", "test"},
 		TestClosestStruct{"rr", "ReadingRainbow"},
 		TestClosestStruct{"resume", "EEResume.pdf"},
+		TestClosestStruct{"mobile.js", "mobile.js"},
 	}
 	for _, v := range testClosestStructs {
 		t.Logf("Testing match %s...", v.TestString)
