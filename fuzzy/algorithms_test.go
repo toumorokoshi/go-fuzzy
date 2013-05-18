@@ -52,6 +52,7 @@ func TestOrderSignificance(t *testing.T) {
 		TestString{"dDe", "disasterdeafening", 3},
 		TestString{"t", "adult", 1},
 		TestString{"dDe", "disasterDeafening", 4},
+		TestString{"td", "/home/tsutsumi/Dropbox/TowerDefense/natives/META-INF/MANIFEST.MF", 4},
 	}
 	for _, v := range testStrings {
 		t.Logf("Testing OrderSignificance %s against %s...", v.A, v.B)

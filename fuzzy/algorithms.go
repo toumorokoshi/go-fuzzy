@@ -52,8 +52,6 @@ func OrderSignificance(a, b string) int {
 	runes := []rune(a)
 	b_runes := []rune(b)
 	index := make([][]int, len(runes), len(runes))
-	/*// a slice telling a travereser where to point to next
-	pointers := make([]int, len(b), len(b)) */
 	for i, _ := range index {
 		index[i] = make([]int, len(runes), len(runes))
 		index[i][0] = -1
@@ -64,7 +62,7 @@ func OrderSignificance(a, b string) int {
 			j := len(runes) - k - 1
 			if unicode.ToLower(c) == r {
 				if (index[j][0] == -1 && (j == 0 || index[j - 1][0] != -1)) ||
-					 (index[j][0] != -1 && b_runes[index[j][0]] == r && c == unicode.ToUpper(r)) {
+					(index[j][0] != -1 && (c == unicode.ToUpper(r) || (c == r && b_runes[index[j][0]] != unicode.ToUpper(r)))) {
 					 if j != 0 {
 						 copy(index[j][1:], index[j - 1][:])
 					 }
