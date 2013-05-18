@@ -14,7 +14,7 @@ type Matcher struct {
 type Match struct {
 	Value       string
 	Levenshtein int
-	SubMatch    bool
+	OrderSignificance int
 }
 
 func (m Match) String() string {
@@ -27,10 +27,10 @@ type Matches []*Match
 func (m Matches) Len() int           { return len(m) }
 func (m Matches) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
 func (m Matches) Less(i, j int) bool { 
-	if m[i].SubMatch == m[j].SubMatch {
+	if m[i].OrderSignificance == m[j].OrderSignificance {
 		return m[i].Levenshtein < m[j].Levenshtein
 	} 
-	return m[i].SubMatch
+	return m[i].OrderSignificance > m[j].OrderSignificance
 }
 
 func NewMatcher(elements []string) Matcher {
@@ -53,7 +53,7 @@ func (m *Matcher) ClosestList(matchString string, count int) Matches {
 	}
 	matchElements := make(Matches, m.Length)
 	for pos, element := range m.elements {
-		matchElements[pos] = &Match{element, Levenshtein(element, matchString), SequenceMatch(matchString, element)}
+		matchElements[pos] = &Match{element, Levenshtein(element, matchString), OrderSignificance(matchString, element)}
 	}
 	sort.Sort(matchElements)
 	return matchElements[0:count]

@@ -51,39 +51,36 @@ func OrderSignificance(a, b string) int {
 	// a value slice and optimal index slice is necessary
 	runes := []rune(a)
 	b_runes := []rune(b)
-	index := make([]int, len(runes), len(runes))
-	// a slice telling a travereser where to point to next
-	pointers := make([]int, len(b), len(b))
+	index := make([][]int, len(runes), len(runes))
+	/*// a slice telling a travereser where to point to next
+	pointers := make([]int, len(b), len(b)) */
 	for i, _ := range index {
-		index[i] = -1
+		index[i] = make([]int, len(runes), len(runes))
+		index[i][0] = -1
 	}
 	// array of runes left to index
 	for i, c := range b_runes {
 		for k, r := range reverseRunes(runes) {
 			j := len(runes) - k - 1
 			if unicode.ToLower(c) == r {
-				if (index[j] == -1 && (j == 0 || index[j - 1] != -1)) ||
-					 (index[j] != -1 && b_runes[index[j]] == r && c == unicode.ToUpper(r)) {
-					 if j == 0 {
-						 pointers[j] = -1
-					 } else {
-						 pointers[i] = index[j - 1]
+				if (index[j][0] == -1 && (j == 0 || index[j - 1][0] != -1)) ||
+					 (index[j][0] != -1 && b_runes[index[j][0]] == r && c == unicode.ToUpper(r)) {
+					 if j != 0 {
+						 copy(index[j][1:], index[j - 1][:])
 					 }
-					 index[j] = i
+					 index[j][0] = i
 				 }
 			}
 		}
 	}
-	start_index := index[len(runes) - 1]
 	rune_index := len(runes) - 1
 	value := 0
-	for start_index != -1 {
-		if runes[rune_index] == b_runes[start_index] {
+	for rune_index > -1 && index[rune_index][0] != -1 {
+		if runes[rune_index] == b_runes[index[len(runes) - 1][len(runes) - rune_index - 1]] {
 			value += 1
 		} else { // else it's a capital
 			value += 2
 		}
-		start_index = pointers[start_index]
 		rune_index--
 	}
 	return value

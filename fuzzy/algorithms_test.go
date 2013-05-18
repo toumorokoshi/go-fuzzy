@@ -50,6 +50,7 @@ func TestOrderSignificance(t *testing.T) {
 		TestString{"npe", "electroplankton", 0},
 		TestString{"mastermind", "masterminder", 10},
 		TestString{"dDe", "disasterdeafening", 3},
+		TestString{"t", "adult", 1},
 		TestString{"dDe", "disasterDeafening", 4},
 	}
 	for _, v := range testStrings {

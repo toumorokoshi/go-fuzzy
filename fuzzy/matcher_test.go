@@ -12,6 +12,7 @@ func BuildMatcher() Matcher {
 		"sitting",
 		"test",
 		"yusuke",
+		"ReadingRainbow",
 	}
 	return NewMatcher(strings)
 }
@@ -26,6 +27,9 @@ func TestClosest(t *testing.T) {
 	}
 	if m.Closest("t") != "test" {
 		t.Errorf("t should match 'test'! it was %s instead.", m.Closest("t"))
+	}
+	if m.Closest("rr") != "ReadingRainbow" {
+		t.Errorf("rr should match 'ReadingRainbow'! it was %s instead.", m.Closest("rr"))
 	}
 }
 
