@@ -26,7 +26,7 @@ type Match struct {
 	IndexMatch int
 	OrderSignificance int
 	Levenshtein int
-	Data map[string]string
+	Data map[string]string // this field exists to store arbitrary data
 }
 
 func (m Match) String() string {
