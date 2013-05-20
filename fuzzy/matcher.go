@@ -26,6 +26,7 @@ type Match struct {
 	IndexMatch int
 	OrderSignificance int
 	Levenshtein int
+	Data map[string]string
 }
 
 func (m Match) String() string {
@@ -78,7 +79,8 @@ func NewMatch(element, matchString string) *Match {
 		significantMatch == len(matchString) * 2,
 		indexMatch,
 		significantMatch,
-		Levenshtein(element, matchString)}
+		Levenshtein(element, matchString),
+	  nil}
 }
 
 /* finds the n closest matches and returns them
