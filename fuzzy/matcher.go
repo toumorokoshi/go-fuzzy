@@ -15,8 +15,13 @@ import "sort"
 import "strings"
 
 type Matcher struct {
-	elements []string
+	elements []MatchStruct
 	Length   int
+}
+
+type MatchStruct struct {
+	Value string
+	Data  map[string]string
 }
 
 type Match struct {
@@ -62,25 +67,37 @@ func (m Matches) Less(i, j int) bool {
 	return m[i].Levenshtein < m[j].Levenshtein
 }
 
-func NewMatcher(elements []string) Matcher {
+func NewMatcher(elements []MatchStruct) Matcher {
 	return Matcher{elements, len(elements)}
 }
 
-// finds the closest match and returns it
-func (m *Matcher) Closest(matchString string) string {
-	return m.ClosestList(matchString, 1)[0].Value
+func NewMatcherFromStrings(elements []string) Matcher {
+	elementsEmptyStructs := make([]MatchStruct, len(elements))
+	for pos, value := range elements {
+		elementsEmptyStructs[pos] = MatchStruct{value, nil}
+	}
+	return NewMatcher(elementsEmptyStructs)
 }
 
-func NewMatch(element, matchString string) *Match {
-	indexMatch := strings.Index(element, matchString)
-	significantMatch := OrderSignificance(element, matchString)
-	return &Match{element, 
-		indexMatch == 0 && len(element) == len(matchString),
+// finds the closest match and returns it
+func (m *Matcher) Closest(matchString string) *Match {
+	return m.ClosestList(matchString, 1)[0]
+}
+
+func NewMatch(element MatchStruct, matchString string) *Match {
+	indexMatch := strings.Index(element.Value, matchString)
+	significantMatch := OrderSignificance(element.Value, matchString)
+	return &Match{element.Value, 
+		indexMatch == 0 && len(element.Value) == len(matchString),
 		significantMatch == len(matchString) * 2,
 		indexMatch,
 		significantMatch,
-		Levenshtein(element, matchString),
-	  nil}
+		Levenshtein(element.Value, matchString),
+	  element.Data}
+}
+
+func NewMatchFromString(element, matchString string) *Match {
+	return NewMatch(MatchStruct{element, nil}, matchString)
 }
 
 /* finds the n closest matches and returns them
